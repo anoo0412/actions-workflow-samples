@@ -30,16 +30,15 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: 'Resolve Project Dependencies Using Pip'
-      shell: bash
       run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         python -m pip install --upgrade pip
-        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
-        popd
+        pip install -r requirements.txt
+    
+    - name: Building web app
+      uses: azure/appservice-build@v2
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
